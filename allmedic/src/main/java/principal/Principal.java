@@ -15,6 +15,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import model.Pessoa;
@@ -98,14 +99,15 @@ public class Principal {
 
 	private static void escreverPresenca() {
 		// TODO Auto-generated method stub
-		System.out.println("Escreva todos os nomes dos presentes (nomes incompletos ou errados não serão considerados).");
-		System.out.println("Digite ? para finalizar");;
+		System.out.println("Escreva todos os nomes dos presentes (nomes incompletos ou com caracteres diferentes não serão considerados).");
+		System.out.println("Digite ? para finalizar.");;
 		System.out.print(">");
 		List<String> nomes = new ArrayList<>();
 		s.nextLine();
 		while(true) {
 			String nome = s.nextLine();
 			if(nome.charAt(0) != '?') {
+				nome = tirarAcentos(nome);
 				nomes.add(nome);
 				continue;
 			}else {
@@ -122,6 +124,42 @@ public class Principal {
 		}
 		
 		System.out.println("Finalizado");
+	}
+
+	private static String tirarAcentos(String nome) {
+		nome = nome.toLowerCase();
+		// TODO Auto-generated method stub
+		nome = nome.replace("à", "a");
+		nome = nome.replace("á", "a");
+		nome = nome.replace("â", "a");
+		nome = nome.replace("ã", "a");
+		nome = nome.replace("ä", "a");
+		
+		nome = nome.replace("é", "e");
+		nome = nome.replace("è", "e");
+		nome = nome.replace("ê", "e");
+		nome = nome.replace("ë", "e");
+
+		nome = nome.replace("í", "i");
+		nome = nome.replace("ì", "i");
+		nome = nome.replace("î", "i");
+		nome = nome.replace("ï", "i");
+		
+		nome = nome.replace("ô", "o");
+		nome = nome.replace("õ", "o");
+		nome = nome.replace("ó", "o");
+		nome = nome.replace("ò", "o");
+		nome = nome.replace("ö", "o");
+		
+		nome = nome.replace("û", "u");
+		nome = nome.replace("ú", "u");
+		nome = nome.replace("ù", "u");
+		nome = nome.replace("ü", "u");
+		
+		nome = nome.replace("ç", "c");
+		
+		
+		return nome;
 	}
 
 	private static void escreverLista() {
@@ -149,12 +187,10 @@ public class Principal {
 			}
 			while (true) {
 			    proxDado = s.next();
-
 			    if (Character.isUpperCase(proxDado.charAt(0))) {
 			        StringBuilder sb = new StringBuilder();
 			        sb.append(nome).append(" ").append(proxDado);
 			        nome = sb.toString();
-			        System.out.println("Juntou: " + nome);
 			    } else if (proxDado.charAt(0) == ' ' || !Character.isLetter(proxDado.charAt(0))) {
 			        break;
 			    }else {
@@ -167,6 +203,8 @@ public class Principal {
 			data.trim();
 			cpf.trim();
 			
+			servico = investigarServico(servico, val);
+			data = formataData(data);
 			
 			Pessoa p = new Pessoa();
 			p.setNome(nome);
@@ -184,6 +222,31 @@ public class Principal {
 		System.out.println("FIM");
 	}
 	
+	private static String formataData(String data) {
+		// TODO Auto-generated method stub
+		data = data.substring(0, 10);
+		return data;
+	}
+
+	private static String investigarServico(String servico, String val) {
+		// TODO Auto-generated method stub
+		if(servico.equalsIgnoreCase("Renovaca") && val.equalsIgnoreCase("333,58")) {
+			servico = "Renovação remunerada";
+		}else if(servico.equalsIgnoreCase("Renovaca") && val.equalsIgnoreCase("184,03")){
+			servico = "Renovação";
+		}else if(servico.equalsIgnoreCase("1a.")) {
+			servico = "1° Habilitação";
+		}else if(servico.equalsIgnoreCase("Troca de cat") && val.equalsIgnoreCase("333,58")) {
+			servico = "Troca de cat. remunerada";
+		}else if(servico.equalsIgnoreCase("Troca de cat") && val.equalsIgnoreCase("184,03")) {
+			servico = "Troca de cat.";
+		}else if(servico.equalsIgnoreCase("2° Via")) {
+			servico = "2° Via";
+		}
+		
+		return servico;
+	}
+
 	private static void gerarExcel(List<Pessoa> pessoas) {
 		String[] colunas = {"Presente","Nome", "Serviço", "Valor", "Data"};
 		Workbook work = new XSSFWorkbook();
@@ -193,7 +256,7 @@ public class Principal {
 		Font headerFont = work.createFont();
 		headerFont.setBold(true);
 		headerFont.setFontHeightInPoints((short) 14);
-		headerFont.setColor(IndexedColors.RED.getIndex());
+		headerFont.setColor(IndexedColors.GREEN.getIndex());
 		
 		// Create a CellStyle with the font
         CellStyle headerCellStyle = work.createCellStyle();
@@ -209,6 +272,7 @@ public class Principal {
             cell.setCellStyle(headerCellStyle);
         }
 
+        
      // Create Cell Style for formatting Date
         CellStyle dateCellStyle = work.createCellStyle();
         dateCellStyle.setDataFormat(create.createDataFormat().getFormat("dd-MM-yyyy"));
@@ -229,8 +293,7 @@ public class Principal {
             row.createCell(3).setCellValue(p.getValor());
 
             row.createCell(4)
-                    .setCellValue(p.getData());
-            
+                    .setCellValue(p.getData());         
         }
 
 		// Resize all columns to fit the content size
@@ -250,9 +313,5 @@ public class Principal {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        
-
-        
-    
 	}
 }
