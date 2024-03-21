@@ -24,7 +24,7 @@ public class Principal {
 
 	static List<Pessoa> pessoas = new ArrayList<>();
 	private static String nomeArquivo = "excel";
-	private static String nomeTabela = "Tabela";
+	private static String nomeTabela = "Protocolos";
 	static Scanner s = new Scanner(System.in);
 	
 	public static void main(String[] args) {
@@ -35,8 +35,8 @@ public class Principal {
 			System.out.println("1 --- Receber dados da lista");
 			System.out.println("2 --- Receber presença");
 			System.out.println("3 --- Renomear arquivo");
-			System.out.println("4 --- Gerar planilha");
-			System.out.println("5 --- Fechar");
+			System.out.println("4 --- Gerar planilha e finalizar");
+			
 			System.out.print(">");
 			String op = s.next();
 			switch(op.charAt(0)) {
@@ -51,9 +51,8 @@ public class Principal {
 				renomearArquivo();
 			case '4':
 				gerarExcel(pessoas);
-				break;
-			case '5': 
 				fechar();
+				break;
 			default:
 				System.out.println("Comando inválido");
 				break;
@@ -231,16 +230,16 @@ public class Principal {
 	private static String investigarServico(String servico, String val) {
 		// TODO Auto-generated method stub
 		if(servico.equalsIgnoreCase("Renovaca") && val.equalsIgnoreCase("333,58")) {
-			servico = "Renovação remunerada";
+			servico = "Renovação Remunerada.";
 		}else if(servico.equalsIgnoreCase("Renovaca") && val.equalsIgnoreCase("184,03")){
 			servico = "Renovação";
 		}else if(servico.equalsIgnoreCase("1a.")) {
 			servico = "1° Habilitação";
-		}else if(servico.equalsIgnoreCase("Troca de cat") && val.equalsIgnoreCase("333,58")) {
+		}else if(servico.equalsIgnoreCase("Troca") && val.equalsIgnoreCase("333,58")) {
 			servico = "Troca de cat. remunerada";
-		}else if(servico.equalsIgnoreCase("Troca de cat") && val.equalsIgnoreCase("184,03")) {
-			servico = "Troca de cat.";
-		}else if(servico.equalsIgnoreCase("2° Via")) {
+		}else if(servico.equalsIgnoreCase("Troca") && val.equalsIgnoreCase("184,03")) {
+			servico = "Troca de Cat.";
+		}else if(servico.equalsIgnoreCase("2a.via")) {
 			servico = "2° Via";
 		}
 		
@@ -282,8 +281,11 @@ public class Principal {
         for(Pessoa p : pessoas) {
             Row row = sheet.createRow(rowNum++);
 
-            row.createCell(0).setCellValue(p.isPresente());
-            
+		if(p.isPresente()){
+            		row.createCell(0).setCellValue(true);
+		}else{
+			row.createCell(0).setCellValue(false);
+		}
             row.createCell(1)
                     .setCellValue(p.getNome());
 
