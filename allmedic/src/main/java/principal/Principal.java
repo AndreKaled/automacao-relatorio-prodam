@@ -282,9 +282,9 @@ public class Principal {
             Row row = sheet.createRow(rowNum++);
 
 		if(p.isPresente()){
-            		row.createCell(0).setCellValue(true);
+            		row.createCell(0).setCellValue(1);
 		}else{
-			row.createCell(0).setCellValue(false);
+			row.createCell(0).setCellValue(0);
 		}
             row.createCell(1)
                     .setCellValue(p.getNome());
