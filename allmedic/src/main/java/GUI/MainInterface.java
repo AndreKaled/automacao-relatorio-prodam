@@ -1,13 +1,13 @@
 package GUI;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.CardLayout;
 import java.awt.Dimension;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -17,8 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
+import process.TratadorPDF;
 
 public class MainInterface extends JFrame {
 
@@ -26,6 +25,10 @@ public class MainInterface extends JFrame {
 
     private JTextArea textArea;
     private JButton abrirButton, confirmarButton;
+    private PresencaInterface presencaInterface = new PresencaInterface();
+    private RenomearArquivoInterface renomearArquivoInterface = new RenomearArquivoInterface();
+    static CardLayout card = new CardLayout();
+    static JPanel mainPanel = new JPanel(card);
 
     public MainInterface() {
         super("Selecionar e Processar PDF");
@@ -47,47 +50,78 @@ public class MainInterface extends JFrame {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = fileChooser.getSelectedFile();
                     textArea.setText(selectedFile.getAbsolutePath());
+                    confirmarButton.setEnabled(true);
                 }
             }
         });
 
         // Cria o botão de confirmar
         confirmarButton = new JButton("Processar PDF");
+        confirmarButton.setEnabled(false);
         confirmarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String caminhoArquivo = textArea.getText();
                 if (!caminhoArquivo.isEmpty()) {
                     try {
-                        // Extrair texto do PDF usando PDFBox
-                        Path path = Paths.get(caminhoArquivo);
-                        File file = path.toFile();
-                        PDDocument document = PDDocument.load(file);
-                        PDFTextStripper stripper = new PDFTextStripper();
-                        String text = stripper.getText(document);
-                        System.out.println("Caminho do arquivo PDF: " + caminhoArquivo);
-                        System.out.println("---------\n" + text);
-                        document.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                        System.out.println("Erro ao processar o PDF.");
+                        TratadorPDF t = new TratadorPDF();
+                        t.LerPDF(caminhoArquivo);
+                        t.gerarExcel();
+                        confirmarButton.setEnabled(false);
+                    }catch(Exception ex){
+                        ex.printStackTrace();
                     }
-                } else {
-                    System.out.println("Nenhum arquivo PDF selecionado.");
+                }else{
+                    System.out.println("Nenhum pdf encontrado.");
                 }
             }
         });
 
+        Button presencaButton = new Button("Presença");
+        presencaButton.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                card.show(mainPanel, "Presenca");
+                revalidate();
+                repaint();
+            }
+            
+        });
+
+        Button renomearButton = new Button("Renomear");
+        renomearButton.addActionListener(new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO Auto-generated method stub
+                card.show(mainPanel, "Renomear");
+                revalidate();
+                repaint();
+            }
+            
+        });
+
+        JPanel initPanel = new JPanel(new BorderLayout());
         // Adiciona os componentes ao painel principal
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.add(abrirButton, BorderLayout.NORTH);
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-        mainPanel.add(confirmarButton, BorderLayout.SOUTH);
+        initPanel.add(abrirButton, BorderLayout.NORTH);
+        initPanel.add(scrollPane, BorderLayout.CENTER);
+        initPanel.add(confirmarButton, BorderLayout.SOUTH);
+        initPanel.add(presencaButton, BorderLayout.EAST);
+        initPanel.add(renomearButton,BorderLayout.WEST);
+
+        //gerenciando cardLayout
+        add(mainPanel);
+        mainPanel.add(initPanel, "Principal");
+        mainPanel.add(presencaInterface, "Presenca");
+        mainPanel.add(renomearArquivoInterface, "Renomear");
+
 
         // Configura o frame
-        setContentPane(mainPanel);
         setPreferredSize(new Dimension(400, 300));
         pack();
+
     }
 
     public static void main(String[] args) {

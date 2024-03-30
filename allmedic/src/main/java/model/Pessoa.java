@@ -2,21 +2,24 @@ package model;
 
 public class Pessoa {
 	String nome;
-	boolean presente;
+	int presente;
 	String servico;
 	String valor;
 	String data;
+	String cpf;
 	
 	public Pessoa() {
 		
 	}
 
-	public Pessoa(String nome, boolean presente, String servico, String valor) {
+	public Pessoa(String nome, String cpf, int presente, String servico, String valor, String data) {
 		super();
 		this.nome = nome;
 		this.presente = presente;
 		this.servico = servico;
 		this.valor = valor;
+		this.cpf = cpf;
+		this.data = data;
 	}
 
 	public String getNome() {
@@ -27,11 +30,11 @@ public class Pessoa {
 		this.nome = nome;
 	}
 
-	public boolean isPresente() {
+	public int getPresente() {
 		return presente;
 	}
 
-	public void setPresente(boolean presente) {
+	public void setPresente(int presente) {
 		this.presente = presente;
 	}
 
@@ -59,5 +62,17 @@ public class Pessoa {
 		this.data = data;
 	}
 	
-	
+	public String getCpf(){
+		return cpf;
+	}
+
+	public void setCpf(String cpf){
+		this.cpf = cpf;
+	}
+
+	@Override
+	public String toString(){
+		return  nome +"{cpf:" +cpf +"|Presente:" +presente
+		+"|Data:" +data +"|Valor:" +valor +"|Serviço:" +servico +"}";
+	}
 }
