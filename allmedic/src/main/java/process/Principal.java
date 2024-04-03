@@ -45,6 +45,15 @@ public class Principal {
 
 	static String investigarServico(String servico, String val) {
 		// TODO Auto-generated method stub
+		/*
+  		R (remunerada) -> 348,59
+  		R -> 192,31
+    		1 -> 348,59
+      		T (remunerada) -> 348,59
+  		T -> 192,31
+    		2 -> 156,28
+  		*/
+		
 		if(servico.equalsIgnoreCase("R") && val.equalsIgnoreCase("333,58")) {
 			servico = "Renovação Remunerada.";
 		}else if(servico.equalsIgnoreCase("R") && val.equalsIgnoreCase("184,03")){
