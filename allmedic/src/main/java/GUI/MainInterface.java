@@ -4,11 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.CardLayout;
 import java.awt.Dimension;
-
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -30,8 +31,11 @@ public class MainInterface extends JFrame {
     static CardLayout card = new CardLayout();
     static JPanel mainPanel = new JPanel(card);
 
+    //carregando imagens
+    private ImageIcon imagePDF = new ImageIcon(getClass().getResource("/images/pdf.png"));
+
     public MainInterface() {
-        super("Selecionar e Processar PDF");
+        super("Relatorio da Prodam");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Cria a área de texto
@@ -40,7 +44,8 @@ public class MainInterface extends JFrame {
         JScrollPane scrollPane = new JScrollPane(textArea);
 
         // Cria o botão para abrir o seletor de arquivos
-        abrirButton = new JButton("Selecionar PDF");
+        abrirButton = new JButton("selecionar");
+        
         abrirButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
