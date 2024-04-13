@@ -45,24 +45,17 @@ public class Principal {
 
 	static String investigarServico(String servico, String val) {
 		// TODO Auto-generated method stub
-		/*
-  		R (remunerada) -> 348,59
-  		R -> 192,31
-    		1 -> 348,59
-      		T (remunerada) -> 348,59
-  		T -> 192,31
-    		2 -> 156,28
-  		*/
 		
-		if(servico.equalsIgnoreCase("R") && val.equalsIgnoreCase("333,58")) {
+		
+		if(servico.equalsIgnoreCase("R") && val.equalsIgnoreCase("348,59")) {
 			servico = "Renovação Remunerada.";
-		}else if(servico.equalsIgnoreCase("R") && val.equalsIgnoreCase("184,03")){
+		}else if(servico.equalsIgnoreCase("R") && val.equalsIgnoreCase("192,31")){
 			servico = "Renovação";
 		}else if(servico.equalsIgnoreCase("1")) {
 			servico = "1° Habilitação";
-		}else if(servico.equalsIgnoreCase("T") && val.equalsIgnoreCase("333,58")) {
+		}else if(servico.equalsIgnoreCase("T") && val.equalsIgnoreCase("348,59")) {
 			servico = "Troca de cat. remunerada";
-		}else if(servico.equalsIgnoreCase("T") && val.equalsIgnoreCase("184,03")) {
+		}else if(servico.equalsIgnoreCase("T") && val.equalsIgnoreCase("192,31")) {
 			servico = "Troca de Cat.";
 		}else if(servico.equalsIgnoreCase("2")) {
 			servico = "2° Via";
